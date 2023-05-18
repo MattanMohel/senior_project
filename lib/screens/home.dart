@@ -2,15 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:senior_project/app_data.dart';
-import 'package:senior_project/images.dart';
-import 'package:senior_project/util/map.dart';
+import 'package:senior_project/screens/manual_page.dart';
+import 'package:senior_project/screens/map.dart';
 import 'package:senior_project/util/constants.dart' as constants;
 import 'package:senior_project/util/toggle.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-import '../search.dart';
+import 'search.dart';
 import '../util/background.dart';
 import 'about_page.dart';
 
@@ -30,16 +28,6 @@ class _HomeScreenState extends State<HomeScreen>
   late Animation<double> _animation;
   late Tween<double> _tween;
   late AnimationController _controller;
-
-  String _floorImagePath(BuildContext context) {
-    int floor = InheritedState.of(context).currentFloor;
-    return backgrounds[floor - 1];
-  }
-
-  Size _floorImageDim(BuildContext context) {
-    int floor = InheritedState.of(context).currentFloor;
-    return dimensions[floor - 1];
-  }
 
   @override
   void initState() {
@@ -106,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   Align(
                     alignment: Alignment.topCenter,
-                    child: Image.asset(_floorImagePath(context)),
+                    child: Image.asset(constants.backgrounds[
+                        InheritedState.of(context).currentFloor - 1]),
                   ),
                   CustomPaint(
                     painter: MapPainter(
@@ -198,7 +187,14 @@ class _HomeScreenState extends State<HomeScreen>
                           itemBuilder: (context) {
                             return [
                               PopupMenuItem(
-                                onTap: () {},
+                                onTap: () {
+                                  Future(
+                                    () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (_) => const AboutPage()),
+                                    ),
+                                  );
+                                },
                                 child: Row(
                                   children: const [
                                     Text('  About This App   -  '),
@@ -208,23 +204,16 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                               PopupMenuItem(
                                 onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return const Scaffold(
-                                          body: SafeArea(
-                                            child: Scaffold(
-                                              body: AboutPage(),
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                  Future(
+                                    () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (_) => const ManualPage()),
                                     ),
                                   );
                                 },
                                 child: Row(
                                   children: const [
-                                    Text('   User\'s manual    -  '),
+                                    Text('   User\'s Manual    -  '),
                                     Icon(Icons.book),
                                   ],
                                 ),
@@ -292,14 +281,14 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
                     SizedBox(
                       width: 65,
-                      child: Image.asset(compassBackground),
+                      child: Image.asset(constants.compassBackground),
                     ),
                     SizedBox(
                       width: 30,
                       child: Transform.rotate(
                         angle: -(_animation.value + constants.compassOffsset) *
                             constants.deg2rad,
-                        child: Image.asset(compassArrow),
+                        child: Image.asset(constants.compassArrow),
                       ),
                     ),
                   ],

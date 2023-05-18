@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+class ManualPage extends StatelessWidget {
+  const ManualPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Text('About this page...'),
+          child: Text('Manual page...'),
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:senior_project/app_data.dart';
 import 'package:senior_project/util/background.dart';
 import 'package:senior_project/util/room.dart';
-import 'package:senior_project/util/style.dart';
+import 'package:senior_project/util/constants.dart' as constants;
 import 'package:senior_project/util/toggle.dart';
 
 enum SearchType {
@@ -317,42 +317,6 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
-
-    return Flexible(
-      fit: FlexFit.tight,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: _floorFilter[floorIndex] ? Colors.black12 : Colors.white,
-            borderRadius: BorderRadius.circular(35),
-          ),
-          child: InkWell(
-            onTap: () {
-              setState(() {
-                _floorFilter[floorIndex] = !_floorFilter[floorIndex];
-                _updateSuggestions();
-              });
-            },
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Floor ${floorIndex + 1}',
-                    style: const TextStyle(color: Colors.black54),
-                  ),
-                  Icon(
-                    _floorFilter[floorIndex] ? Icons.check : Icons.clear,
-                    size: 15,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   @override
@@ -373,7 +337,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 height: 130, //65,
                 padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                 decoration: BoxDecoration(
-                  boxShadow: styleBoxShadow,
+                  boxShadow: constants.styleBoxShadow,
                   color: Colors.white,
                   borderRadius: const BorderRadius.vertical(
                       // bottom: Radius.circular(15),

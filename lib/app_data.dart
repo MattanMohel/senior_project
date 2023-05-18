@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:senior_project/images.dart';
+import 'package:senior_project/util/constants.dart' as constants;
 import 'package:senior_project/util/room.dart';
 
 class InheritedState extends InheritedWidget {
@@ -88,8 +88,8 @@ class AppBaseState extends State<AppBase> {
 
   @override
   void initState() {
-    for (int i = 0; i < floorCount; i++) {
-      _toRoomJson(jsons[i]);
+    for (int i = 0; i < constants.floorCount; i++) {
+      _toRoomJson(constants.jsons[i]);
     }
     super.initState();
   }
@@ -128,7 +128,7 @@ class AppBaseState extends State<AppBase> {
   }
 
   void _incrementFloor() {
-    if (_floor == floorCount) {
+    if (_floor == constants.floorCount) {
       setState(() => _floor = 1);
       return;
     }
@@ -137,7 +137,7 @@ class AppBaseState extends State<AppBase> {
 
   void _decrementFloor() {
     if (_floor == 1) {
-      setState(() => _floor = floorCount);
+      setState(() => _floor = constants.floorCount);
       return;
     }
     setState(() => _floor -= 1);
