@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-const String compassBackground = 'assets/compass/background.png';
-const String compassArrow = 'assets/compass/arrow.png';
+const String compassBackground = 'assets/images/background.png';
+const String compassArrow = 'assets/images/arrow.png';
 const int floorCount = 3;
 
 const List<Size> dimensions = [
-  Size(1599, 1717),
-  Size(1561, 2042),
   Size(1628, 2238),
+  Size(1561, 2042),
+  Size(1599, 1717),
 ];
 
 const List<String> backgrounds = [

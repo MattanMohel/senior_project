@@ -41,6 +41,7 @@ dependencies:
   flutter_compass: ^0.7.0
   permission_handler: ^10.2.0
   http: ^0.13.6
+  url_launcher: ^6.1.11
 
 
 dev_dependencies:
@@ -73,7 +74,7 @@ flutter:
     - assets/Floor 2/floor-2.json
     - assets/Floor 3/bg.PNG
     - assets/Floor 3/floor-3.json
-    - assets/compass/arrow.png
-    - assets/compass/background.png
+    - assets/images/arrow.png
+    - assets/images/background.png
 
 

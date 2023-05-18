@@ -7,5 +7,3 @@ const SystemUiOverlayStyle styleSystem = SystemUiOverlayStyle(
   systemNavigationBarColor: Colors.white,
   statusBarColor: Colors.black26,
 );
-
-const bool debugMode = false;

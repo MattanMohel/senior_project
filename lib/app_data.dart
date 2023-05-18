@@ -41,14 +41,14 @@ class InheritedState extends InheritedWidget {
 
   void setStartPoint(Room? start) => appState._setStartPoint(start);
   void setEndPoint(Room? end) => appState._setEndPoint(end);
-  void setAccessibility(bool setting) => appState._setAccessibility(setting);
+  void toggleAccessibility() => appState._toggleAccessibility();
   void incrementFloor() => appState._incrementFloor();
   void decrementFloor() => appState._decrementFloor();
 
   // path computation
 
-  RoomPath getShortestPath(Room end) => start!.shortestPath(roomNameMap, end);
-  Room? getNearestOf(RoomType type) => start!.findNearestOf(roomNameMap, type);
+  RoomPath getShortestPath(Room end) => start!.shortestPath(this, end);
+  Room? getNearestOf(RoomType type) => start!.findNearestOf(this, type);
   List<Room> getRoomsOfFloor(int floor) {
     return rooms.where((room) => room.floor - 1 == floor).toList();
   }
@@ -143,8 +143,8 @@ class AppBaseState extends State<AppBase> {
     setState(() => _floor -= 1);
   }
 
-  void _setAccessibility(bool setting) {
-    setState(() => _accessibility = setting);
+  void _toggleAccessibility() {
+    setState(() => _accessibility = !_accessibility);
   }
 
   void _setStartPoint(Room? start) {

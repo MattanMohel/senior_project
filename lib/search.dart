@@ -4,6 +4,7 @@ import 'package:senior_project/app_data.dart';
 import 'package:senior_project/util/background.dart';
 import 'package:senior_project/util/room.dart';
 import 'package:senior_project/util/style.dart';
+import 'package:senior_project/util/toggle.dart';
 
 enum SearchType {
   start,
@@ -107,6 +108,8 @@ class SearchButtonState extends State<SearchButton> {
     );
   }
 
+  InheritedState get state => InheritedState.of(context);
+
   void setText(Room? room) {
     switch (widget.searchType) {
       case SearchType.start:
@@ -133,10 +136,6 @@ class SearchButtonState extends State<SearchButton> {
     searchRoom = room;
     setState(() => recents.add(room));
   }
-
-  InheritedState get data {
-    return InheritedState.of(context);
-  }
 }
 
 class SearchScreen extends StatefulWidget {
@@ -154,11 +153,11 @@ class _SearchScreenState extends State<SearchScreen> {
   _SearchScreenState();
 
   List<Room> _filteredRooms = [];
-  List<bool> floorFilter = [true, true, true];
+  final List<bool> _floorFilter = [true, true, true];
 
   @override
   void initState() {
-    _filteredRooms = List.from(getButton.terms);
+    _filteredRooms = List.from(_button.terms);
     widget.searchController.addListener(() => _updateSuggestions());
     super.initState();
   }
@@ -170,6 +169,9 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
+  SearchButton get _button => widget.searchState.widget;
+  InheritedState get _state => widget.searchState.state;
+
   void _exitSearch(BuildContext context, Room? result) {
     widget.searchState.setText(result);
     Navigator.of(context).pop();
@@ -177,18 +179,17 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _updateSuggestions() {
     setState(() {
-      _filteredRooms = getButton.terms
-          .where((term) =>
-              floorFilter[term.floor - 1] &&
-              term.type != RoomType.none &&
-              term.name
-                  .toLowerCase()
-                  .contains(widget.searchController.text.toLowerCase()))
-          .toList();
+      _filteredRooms = _button.terms.where((term) {
+        return _floorFilter[term.floor - 1] &&
+            term.type != RoomType.none &&
+            term.name
+                .toLowerCase()
+                .contains(widget.searchController.text.toLowerCase());
+      }).toList();
     });
   }
 
-  void buildTab(List<Widget> suggestions, String title, List<Room> rooms) {
+  void _buildTab(List<Widget> suggestions, String title, List<Room> rooms) {
     suggestions.add(
       SizedBox(
         height: 55,
@@ -249,33 +250,41 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Widget> _buildSuggestionTiles(BuildContext context) {
     List<Widget> suggestions = [];
 
-    InheritedState data = widget.searchState.data;
-
-    if (data.start != null &&
-        getButton.searchType == SearchType.end &&
+    if (_state.start != null &&
+        _button.searchType == SearchType.end &&
         widget.searchController.text.isEmpty) {
-      Room? nearestBathroom = data.getNearestOf(RoomType.bathroom);
-      Room? nearestEntrance = data.getNearestOf(RoomType.exit);
+      Room? nearestBathroom = _state.getNearestOf(RoomType.bathroom);
+      Room? nearestEntrance = _state.getNearestOf(RoomType.exit);
+      Room? nearestWayUp = _state.accesibilitySetting
+          ? _state.getNearestOf(RoomType.elevator)
+          : _state.getNearestOf(RoomType.stairs);
 
       if (nearestBathroom != null) {
-        buildTab(suggestions, 'Nearest Bathroom', [nearestBathroom]);
+        _buildTab(suggestions, 'Nearest Bathroom', [nearestBathroom]);
       }
       if (nearestEntrance != null) {
-        buildTab(suggestions, 'Nearest Exit', [nearestEntrance]);
+        _buildTab(suggestions, 'Nearest Exit', [nearestEntrance]);
+      }
+      if (nearestWayUp != null) {
+        _buildTab(
+          suggestions,
+          _state.accesibilitySetting ? 'Nearest Elevator' : 'Nearest Stairs',
+          [nearestWayUp],
+        );
       }
     }
 
     if (widget.searchState.searchRoom != null &&
         widget.searchState.recents.isNotEmpty &&
         widget.searchController.text.isEmpty) {
-      buildTab(
+      _buildTab(
         suggestions,
         'Recent Searches',
         widget.searchState.recents.reversed.toList(),
       );
     }
 
-    buildTab(
+    _buildTab(
       suggestions,
       _filteredRooms.isNotEmpty ? 'Search all rooms...' : 'No matching results',
       _filteredRooms,
@@ -289,15 +298,39 @@ class _SearchScreenState extends State<SearchScreen> {
       fit: FlexFit.tight,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
+        child: Toggle(
+          onToggle: () {
+            setState(() {
+              _floorFilter[floorIndex] = !_floorFilter[floorIndex];
+              _updateSuggestions();
+            });
+          },
+          toggleValue: () {
+            return _floorFilter[floorIndex];
+          },
+          child: Center(
+            child: Text(
+              'Floor ${floorIndex + 1}',
+              style: const TextStyle(color: Colors.black54),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return Flexible(
+      fit: FlexFit.tight,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
         child: Container(
           decoration: BoxDecoration(
-            color: floorFilter[floorIndex] ? Colors.black12 : Colors.white,
+            color: _floorFilter[floorIndex] ? Colors.black12 : Colors.white,
             borderRadius: BorderRadius.circular(35),
           ),
           child: InkWell(
             onTap: () {
               setState(() {
-                floorFilter[floorIndex] = !floorFilter[floorIndex];
+                _floorFilter[floorIndex] = !_floorFilter[floorIndex];
                 _updateSuggestions();
               });
             },
@@ -310,7 +343,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     style: const TextStyle(color: Colors.black54),
                   ),
                   Icon(
-                    floorFilter[floorIndex] ? Icons.check : Icons.clear,
+                    _floorFilter[floorIndex] ? Icons.check : Icons.clear,
                     size: 15,
                   )
                 ],
@@ -321,8 +354,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-
-  SearchButton get getButton => widget.searchState.widget;
 
   @override
   Widget build(BuildContext context) {

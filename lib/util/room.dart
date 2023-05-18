@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:senior_project/app_data.dart';
+import 'package:senior_project/util/constants.dart';
 
 /// enum of possible room types
 enum RoomType {
@@ -70,15 +72,18 @@ class Room {
     return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2));
   }
 
-  /// Returns the shortest path possible between to `end`
-  RoomPath shortestPath(HashMap<String, Room> roomNames, Room end) {
-    // list of univisited nodes
-    List<String> unvisited = roomNames.keys.toList();
-    // map of previously visited nodes
-    Map<String, String> previous = roomNames.map((key, _) => MapEntry(key, ''));
-    // map of distances to nodes
+  /// Returns the shortest possible path possible between [self]
+  /// and [end] given the inherited state of the application and
+  /// using Dijkstra's path-finding algorithm
+  RoomPath shortestPath(InheritedState state, Room end) {
+    // a list of all unvisited nodes
+    List<String> unvisited = state.roomNameMap.keys.toList();
+    // a list of all previously visited nodes
+    Map<String, String> previous =
+        state.roomNameMap.map((key, _) => MapEntry(key, ''));
+    // a list of shortest distances to all nodes
     Map<String, double> distances =
-        roomNames.map((key, _) => MapEntry(key, double.infinity));
+        state.roomNameMap.map((key, _) => MapEntry(key, double.infinity));
 
     distances[name] = 0;
 
@@ -87,17 +92,31 @@ class Room {
           .reduce((lhs, rhs) => distances[lhs]! < distances[rhs]! ? lhs : rhs);
 
       unvisited.remove(key);
-      Room room = roomNames[key]!;
+
+      Room room = state.roomNameMap[key]!;
 
       for (String nodeId in room.nodes) {
-        Room node = roomNames[nodeId]!;
+        Room node = state.roomNameMap[nodeId]!;
         double distance = room.distanceTo(node) + distances[key]!;
 
-        if (node.type == RoomType.courtyard ||
-            node.type == RoomType.classroom) {
-          distance = 100 * distance;
+        // if path passes through another classroom
+        bool b1 = node.type == RoomType.classroom && end != node;
+        // if path passes through the courtyard
+        bool b2 = node.type == RoomType.courtyard && end != node;
+        // if path passes through elevator while accessibility setting are disabled
+        bool b3 = node.type == RoomType.elevator && !state.accesibilitySetting;
+        // if path finds a shorter route by unecessarily changing floors using stairs
+        bool b4 = node.type == RoomType.stairs && floor == end.floor;
+        // if path finds a shorter route by unecessarily changing floors using an elevator
+        bool b5 = node.type == RoomType.elevator && floor == end.floor;
+        // if path passes through stairs when accessibility settings are enabled
+        bool b6 = node.type == RoomType.stairs && state.accesibilitySetting;
+
+        if (b1 || b2 || b3 || b4 || b5 || b6) {
+          distance = double.maxFinite;
         }
 
+        // update path if current connection is shorter
         if (distance < distances[nodeId]!) {
           distances[nodeId] = distance;
           previous[nodeId] = key;
@@ -105,6 +124,7 @@ class Room {
       }
     }
 
+    // iterate backwards to assemble the path
     List<String> path = [end.name];
     while (path.last != name) {
       path.add(previous[path.last]!);
@@ -113,22 +133,18 @@ class Room {
     return RoomPath(path.reversed.toList(), distances[end.name]!);
   }
 
-  Room? findNearestOf(HashMap<String, Room> roomNames, RoomType type) {
-    var rooms = roomNames.values.where((room) => room.type == type);
-
+  Room? findNearestOf(InheritedState state, RoomType type) {
+    Iterable<Room> rooms = state.rooms.where((room) => room.type == type);
     if (rooms.isEmpty) {
       return null;
     }
 
     return rooms.reduce((lhs, rhs) {
-      double leftDist = shortestPath(roomNames, lhs).distance;
-      double rightDist = shortestPath(roomNames, rhs).distance;
+      double leftDist = shortestPath(state, lhs).distance;
+      double rightDist = shortestPath(state, rhs).distance;
       return leftDist < rightDist ? lhs : rhs;
     });
   }
 
-  Offset scaledOffset(double scale, {straightening = 10}) => Offset(
-      scale * straightening * (x / straightening).round(),
-      scale * straightening * (y / straightening).round());
   Offset get offset => Offset(x.toDouble(), y.toDouble());
 }

@@ -1,17 +1,18 @@
-// TODO: add accessibility elevator option
-
-import 'dart:math' as math;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:senior_project/app_data.dart';
 import 'package:senior_project/images.dart';
 import 'package:senior_project/util/map.dart';
+import 'package:senior_project/util/constants.dart' as constants;
+import 'package:senior_project/util/toggle.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../search.dart';
 import '../util/background.dart';
+import 'about_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   CustomPaint(
                     painter: MapPainter(
-                      context: context,
+                      state: InheritedState.of(context),
                       lineWidth: 3,
                       pointRadius: 6,
                       startColor: const Color.fromARGB(225, 239, 83, 80),
@@ -137,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Spacer(),
                   Expanded(
                     child: Material(
                       color: Colors.transparent,
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ),
                   const SizedBox(
-                    width: 35,
+                    width: 15,
                   ),
                   Text(
                     'Floor  ${InheritedState.of(context).currentFloor}',
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ),
                   const SizedBox(
-                    width: 35,
+                    width: 15,
                   ),
                   Expanded(
                     child: Material(
@@ -178,7 +178,78 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                   ),
-                  const Spacer()
+                  Expanded(
+                    child: Toggle(
+                      onToggle: () {
+                        InheritedState.of(context).toggleAccessibility();
+                      },
+                      toggleValue: () {
+                        return InheritedState.of(context).accesibilitySetting;
+                      },
+                      height: 30,
+                      child: const Icon(Icons.accessible),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: PopupMenuButton(
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                onTap: () {},
+                                child: Row(
+                                  children: const [
+                                    Text('  About This App   -  '),
+                                    Icon(Icons.question_mark),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const Scaffold(
+                                          body: SafeArea(
+                                            child: Scaffold(
+                                              body: AboutPage(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  children: const [
+                                    Text('   User\'s manual    -  '),
+                                    Icon(Icons.book),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                onTap: () async {
+                                  constants
+                                      .openLinkInBrowser(constants.schoolURL);
+                                },
+                                child: Row(
+                                  children: const [
+                                    Text('  School Website  -  '),
+                                    Icon(Icons.link),
+                                  ],
+                                ),
+                              ),
+                            ];
+                          },
+                          child: const Icon(Icons.more_vert)),
+                    ),
+                  )
+                  // const Padding(
+                  //   padding: EdgeInsets.only(right: 12.0, left: 4.0),
+                  //   child: Icon(Icons.more_vert),
+                  // ),
                 ],
               ),
               const Padding(
@@ -226,7 +297,8 @@ class _HomeScreenState extends State<HomeScreen>
                     SizedBox(
                       width: 30,
                       child: Transform.rotate(
-                        angle: _animation.value * math.pi / 180,
+                        angle: -(_animation.value + constants.compassOffsset) *
+                            constants.deg2rad,
                         child: Image.asset(compassArrow),
                       ),
                     ),
