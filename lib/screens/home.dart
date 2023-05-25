@@ -81,12 +81,12 @@ class _HomeScreenState extends State<HomeScreen>
             clipBehavior: Clip.none,
             minScale: 0.5,
             maxScale: 6,
-            boundaryMargin: const EdgeInsets.all(20),
+            boundaryMargin: const EdgeInsets.all(60),
             child: Align(
               alignment: Alignment.topLeft,
               child: Stack(
                 children: [
-                  if (!kIsWeb)
+                  if (!kIsWeb || !constants.optimizeWeb)
                     CustomPaint(
                       painter: BackgroundPainter(
                         width: 0.2,
@@ -191,13 +191,14 @@ class _HomeScreenState extends State<HomeScreen>
                                   Future(
                                     () => Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (_) => const AboutPage()),
+                                        builder: (_) => const AboutPage(),
+                                      ),
                                     ),
                                   );
                                 },
-                                child: Row(
-                                  children: const [
-                                    Text('  About This App   -  '),
+                                child: const Row(
+                                  children: [
+                                    Text('  About this app   -  '),
                                     Icon(Icons.question_mark),
                                   ],
                                 ),
@@ -207,13 +208,14 @@ class _HomeScreenState extends State<HomeScreen>
                                   Future(
                                     () => Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (_) => const ManualPage()),
+                                        builder: (_) => const ManualPage(),
+                                      ),
                                     ),
                                   );
                                 },
-                                child: Row(
-                                  children: const [
-                                    Text('   User\'s Manual    -  '),
+                                child: const Row(
+                                  children: [
+                                    Text('   User\'s manual    -  '),
                                     Icon(Icons.book),
                                   ],
                                 ),
@@ -223,9 +225,9 @@ class _HomeScreenState extends State<HomeScreen>
                                   constants
                                       .openLinkInBrowser(constants.schoolURL);
                                 },
-                                child: Row(
-                                  children: const [
-                                    Text('  School Website  -  '),
+                                child: const Row(
+                                  children: [
+                                    Text('  School website  -  '),
                                     Icon(Icons.link),
                                   ],
                                 ),

@@ -687,7 +687,8 @@
         "description": "",
         "nodes": [
             "8391860",
-            "9301807"
+            "9301807",
+			"8951840"
         ]
     },
     {
@@ -713,6 +714,7 @@
         "room_type": "Elevator",
         "description": "",
         "nodes": [
+			"8951840",
 			"A Elevator",
 			"C Elevator"
         ]

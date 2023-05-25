@@ -6,7 +6,11 @@ import 'package:senior_project/util/constants.dart' as constants;
 import 'app_data.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(constants.styleSystem);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
   runApp(
     const MaterialApp(

@@ -1,9 +1,7 @@
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:senior_project/app_data.dart';
-import 'package:senior_project/util/constants.dart';
 
 /// enum of possible room types
 enum RoomType {
@@ -93,24 +91,24 @@ class Room {
 
       unvisited.remove(key);
 
-      Room room = state.roomNameMap[key]!;
+      Room p1 = state.roomNameMap[key]!;
 
-      for (String nodeId in room.nodes) {
-        Room node = state.roomNameMap[nodeId]!;
-        double distance = room.distanceTo(node) + distances[key]!;
+      for (String nodeId in p1.nodes) {
+        Room p2 = state.roomNameMap[nodeId]!;
+        double distance = p1.distanceTo(p2) + distances[key]!;
 
         // if path passes through another classroom
-        bool b1 = node.type == RoomType.classroom && end != node;
+        bool b1 = p2.type == RoomType.classroom && end != p2;
         // if path passes through the courtyard
-        bool b2 = node.type == RoomType.courtyard && end != node;
+        bool b2 = p2.type == RoomType.courtyard && end != p2;
         // if path passes through elevator while accessibility setting are disabled
-        bool b3 = node.type == RoomType.elevator && !state.accesibilitySetting;
+        bool b3 = p2.type == RoomType.elevator && !state.accesibilitySetting;
         // if path finds a shorter route by unecessarily changing floors using stairs
-        bool b4 = node.type == RoomType.stairs && floor == end.floor;
+        bool b4 = p2.type == RoomType.stairs && floor == end.floor;
         // if path finds a shorter route by unecessarily changing floors using an elevator
-        bool b5 = node.type == RoomType.elevator && floor == end.floor;
+        bool b5 = p2.type == RoomType.elevator && floor == end.floor;
         // if path passes through stairs when accessibility settings are enabled
-        bool b6 = node.type == RoomType.stairs && state.accesibilitySetting;
+        bool b6 = p2.type == RoomType.stairs && state.accesibilitySetting;
 
         if (b1 || b2 || b3 || b4 || b5 || b6) {
           distance = double.maxFinite;

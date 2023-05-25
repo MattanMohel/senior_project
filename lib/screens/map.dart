@@ -2,8 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:senior_project/app_data.dart';
-import 'package:senior_project/images.dart';
 import 'package:senior_project/util/room.dart';
+
+import '../util/constants.dart' as constants;
 
 class MapPainter extends CustomPainter {
   MapPainter({
@@ -31,7 +32,7 @@ class MapPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = lineWidth;
 
-    Size imageSize = dimensions[state.currentFloor - 1];
+    Size imageSize = constants.dimensions[state.currentFloor - 1];
     Offset? pI;
     Offset? pF;
 

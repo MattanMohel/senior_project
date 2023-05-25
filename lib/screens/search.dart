@@ -255,9 +255,8 @@ class _SearchScreenState extends State<SearchScreen> {
         widget.searchController.text.isEmpty) {
       Room? nearestBathroom = _state.getNearestOf(RoomType.bathroom);
       Room? nearestEntrance = _state.getNearestOf(RoomType.exit);
-      Room? nearestWayUp = _state.accesibilitySetting
-          ? _state.getNearestOf(RoomType.elevator)
-          : _state.getNearestOf(RoomType.stairs);
+      Room? nearestWayUp = _state.getNearestOf(
+          _state.accesibilitySetting ? RoomType.elevator : RoomType.stairs);
 
       if (nearestBathroom != null) {
         _buildTab(suggestions, 'Nearest Bathroom', [nearestBathroom]);
@@ -267,10 +266,9 @@ class _SearchScreenState extends State<SearchScreen> {
       }
       if (nearestWayUp != null) {
         _buildTab(
-          suggestions,
-          _state.accesibilitySetting ? 'Nearest Elevator' : 'Nearest Stairs',
-          [nearestWayUp],
-        );
+            suggestions,
+            _state.accesibilitySetting ? 'Nearest Elevator' : 'Nearest Stairs',
+            [nearestWayUp]);
       }
     }
 
@@ -325,7 +323,7 @@ class _SearchScreenState extends State<SearchScreen> {
       children: [
         Column(
           children: [
-            if (!kIsWeb)
+            if (!kIsWeb || !constants.optimizeWeb)
               Align(
                 alignment: Alignment.topLeft,
                 child: CustomPaint(
