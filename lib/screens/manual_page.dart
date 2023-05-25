@@ -9,7 +9,7 @@ class ManualPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextScreen(
-      title: 'User Manual',
+      title: 'User\'s Manual',
       child: Markdown(
         styleSheet: MarkdownStyleSheet(p: const TextStyle(fontSize: 18)),
         data: constants.manualMarkdown,

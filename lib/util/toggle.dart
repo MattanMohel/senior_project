@@ -29,31 +29,41 @@ class Toggle extends StatefulWidget {
 class _ToggleState extends State<Toggle> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => widget.onToggle(),
-      child: Container(
-        height: widget.height,
-        width: widget.width,
-        decoration: BoxDecoration(
-          color:
-              widget.toggleValue() ? widget.enabledColor : widget.disabledColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(widget.borderRadius),
-          ),
-          border: Border.all(
-            color: widget.enabledColor,
-            width: 0.25,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: widget.child,
+    return ClipRect(
+      clipBehavior: Clip.hardEdge,
+      child: InkWell(
+        onTap: () => widget.onToggle(),
+        child: Container(
+          height: widget.height,
+          width: widget.width,
+          decoration: BoxDecoration(
+            color: widget.toggleValue()
+                ? widget.enabledColor
+                : widget.disabledColor,
+            borderRadius: BorderRadius.all(
+              Radius.circular(widget.borderRadius),
             ),
-            Icon(widget.toggleValue() ? Icons.check : Icons.clear),
-          ],
+            border: Border.all(
+              color: widget.enabledColor,
+              width: 0.25,
+            ),
+          ),
+          child: Wrap(
+            clipBehavior: Clip.hardEdge,
+            textDirection: TextDirection.ltr,
+            alignment: WrapAlignment.center,
+            runAlignment: WrapAlignment.center,
+            direction: Axis.vertical,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                child: widget.child,
+              ),
+              Icon(
+                widget.toggleValue() ? Icons.check : Icons.clear,
+              ),
+            ],
+          ),
         ),
       ),
     );

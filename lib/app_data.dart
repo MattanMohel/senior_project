@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:senior_project/util/constants.dart' as constants;
@@ -9,9 +10,9 @@ import 'package:senior_project/util/room.dart';
 class InheritedState extends InheritedWidget {
   const InheritedState({
     super.key,
+    required super.child,
     required this.appState,
     required this.size,
-    required super.child,
   });
 
   final AppBaseState appState;
@@ -62,7 +63,10 @@ class InheritedState extends InheritedWidget {
 }
 
 class AppBase extends StatefulWidget {
-  const AppBase({super.key, required this.child});
+  const AppBase({
+    super.key,
+    required this.child,
+  });
   final Widget child;
 
   @override

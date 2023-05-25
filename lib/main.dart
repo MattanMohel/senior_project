@@ -5,12 +5,13 @@ import 'package:senior_project/util/constants.dart' as constants;
 
 import 'app_data.dart';
 
+// ! launch_review
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(constants.styleSystem);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
   runApp(
     const MaterialApp(
@@ -18,7 +19,9 @@ void main() {
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Color.fromARGB(255, 249, 253, 255),
-        body: AppBase(child: HomeScreen()),
+        body: AppBase(
+          child: HomeScreen(),
+        ),
       ),
     ),
   );

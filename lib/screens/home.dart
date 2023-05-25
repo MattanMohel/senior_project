@@ -25,18 +25,20 @@ class _HomeScreenState extends State<HomeScreen>
   double targetHeading = 0;
   double step = 15;
 
+  final PanelController _panelController = PanelController();
+
   late Animation<double> _animation;
   late Tween<double> _tween;
-  late AnimationController _controller;
+  late AnimationController _animationController;
 
   @override
   void initState() {
-    _controller = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
     _tween = Tween(begin: heading, end: targetHeading);
-    _animation = _tween.animate(_controller)
+    _animation = _tween.animate(_animationController)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           double target = (step * (targetHeading / step).round()).toDouble();
@@ -50,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen>
 
           _tween.begin = heading;
           _tween.end = heading + delta;
-          _controller.reset();
-          _controller.forward();
+          _animationController.reset();
+          _animationController.forward();
         }
       })
       ..addListener(() {
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen>
         });
       });
 
-    _controller.forward();
+    _animationController.forward();
 
     if (!kIsWeb) {
       FlutterCompass.events!.listen((event) {
@@ -93,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                   Align(
-                    alignment: Alignment.topCenter,
+                    alignment: Alignment.topLeft,
                     child: Image.asset(constants.backgrounds[
                         InheritedState.of(context).currentFloor - 1]),
                   ),
@@ -113,11 +115,15 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         SlidingUpPanel(
+          controller: _panelController,
           borderRadius: const BorderRadius.vertical(
             top: Radius.circular(30),
           ),
-          minHeight: 50,
+          minHeight: 90,
           maxHeight: 265,
+          defaultPanelState: PanelState.OPEN,
+          backdropEnabled: true,
+          backdropOpacity: 0.2,
           panel: Column(
             children: [
               const Icon(Icons.drag_handle),
@@ -134,8 +140,8 @@ class _HomeScreenState extends State<HomeScreen>
                         onTap: () =>
                             InheritedState.of(context).decrementFloor(),
                         child: const Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 30,
+                          Icons.arrow_downward,
+                          size: 25,
                         ),
                       ),
                     ),
@@ -161,29 +167,37 @@ class _HomeScreenState extends State<HomeScreen>
                         onTap: () =>
                             InheritedState.of(context).incrementFloor(),
                         child: const Icon(
-                          Icons.keyboard_arrow_up,
-                          size: 30,
+                          Icons.arrow_upward,
+                          size: 25,
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Toggle(
-                      onToggle: () {
-                        InheritedState.of(context).toggleAccessibility();
-                      },
-                      toggleValue: () {
-                        return InheritedState.of(context).accesibilitySetting;
-                      },
-                      height: 30,
-                      child: const Icon(Icons.accessible),
+                  Toggle(
+                    onToggle: () {
+                      InheritedState.of(context).toggleAccessibility();
+                    },
+                    toggleValue: () {
+                      return InheritedState.of(context).accesibilitySetting;
+                    },
+                    height: 30,
+                    width: _panelController.isAttached
+                        ? 75 * _panelController.panelPosition
+                        : 0,
+                    child: const Center(
+                      child: Icon(Icons.accessible),
                     ),
                   ),
+
                   SizedBox(
                     height: 35,
+                    width: _panelController.isAttached
+                        ? 50 * _panelController.panelPosition
+                        : 0,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: PopupMenuButton(
+                          clipBehavior: Clip.hardEdge,
                           itemBuilder: (context) {
                             return [
                               PopupMenuItem(
@@ -199,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 child: const Row(
                                   children: [
                                     Text('  About this app   -  '),
-                                    Icon(Icons.question_mark),
+                                    Icon(Icons.help_center),
                                   ],
                                 ),
                               ),
@@ -215,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 },
                                 child: const Row(
                                   children: [
-                                    Text('   User\'s manual    -  '),
+                                    Text('   User\'s manual   -  '),
                                     Icon(Icons.book),
                                   ],
                                 ),

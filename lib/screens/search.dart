@@ -292,8 +292,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Flexible _createFilterButton(int floorIndex) {
-    return Flexible(
-      fit: FlexFit.tight,
+    return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Toggle(
