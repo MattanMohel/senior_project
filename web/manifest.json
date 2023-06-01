@@ -8,7 +8,8 @@
     "description": "A digital map of BHS",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
-    "icons": [
+	"uses-material-design": true,
+	"icons": [
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",

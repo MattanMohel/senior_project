@@ -146,9 +146,11 @@ class _HomeScreenState extends State<HomeScreen>
                         child: InkWell(
                           onTap: () =>
                               InheritedState.of(context).decrementFloor(),
-                          child: const Icon(
-                            Icons.arrow_downward,
-                            size: 25,
+                          child: const Center(
+                            child: Icon(
+                              Icons.arrow_downward,
+                              size: 25,
+                            ),
                           ),
                         ),
                       ),
@@ -204,9 +206,11 @@ class _HomeScreenState extends State<HomeScreen>
                         child: InkWell(
                           onTap: () =>
                               InheritedState.of(context).incrementFloor(),
-                          child: const Icon(
-                            Icons.arrow_upward,
-                            size: 25,
+                          child: const Center(
+                            child: Icon(
+                              Icons.arrow_upward,
+                              size: 25,
+                            ),
                           ),
                         ),
                       ),

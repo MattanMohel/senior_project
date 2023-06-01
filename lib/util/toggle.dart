@@ -55,12 +55,16 @@ class _ToggleState extends State<Toggle> {
             runAlignment: WrapAlignment.center,
             direction: Axis.vertical,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: widget.child,
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                  child: widget.child,
+                ),
               ),
-              Icon(
-                widget.toggleValue() ? Icons.check : Icons.clear,
+              Center(
+                child: Icon(
+                  widget.toggleValue() ? Icons.check : Icons.clear,
+                ),
               ),
             ],
           ),
