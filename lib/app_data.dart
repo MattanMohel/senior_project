@@ -152,6 +152,9 @@ class AppBaseState extends State<AppBase> {
   }
 
   void _setStartPoint(Room? start) {
+    if (start != null) {
+      _floor = start.floor;
+    }
     setState(() => _start = start);
   }
 

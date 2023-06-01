@@ -1,11 +1,11 @@
 {
-    "name": "senior_project",
-    "short_name": "senior_project",
+    "name": "Schoogle Map",
+    "short_name": "Schoogle Map",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A digital map of BHS",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

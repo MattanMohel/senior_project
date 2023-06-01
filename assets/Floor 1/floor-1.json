@@ -547,7 +547,7 @@
         "x": 668,
         "y": 1273,
         "room_type": "Misc",
-        "description": "A Gathering Place of Bulldogs",
+        "description": "The BHS Crossroad",
         "nodes": [
             "7641371",
             "9821273",
@@ -1161,7 +1161,7 @@
         "x": 957,
         "y": 1570,
         "room_type": "Courtyard",
-        "description": "",
+        "description": "Outside Garden",
         "nodes": [
             "Library Courtyard Door",
             "Main Courtyard Door",

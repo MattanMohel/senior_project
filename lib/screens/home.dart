@@ -102,8 +102,8 @@ class _HomeScreenState extends State<HomeScreen>
                   CustomPaint(
                     painter: MapPainter(
                       state: InheritedState.of(context),
-                      lineWidth: 3,
-                      pointRadius: 6,
+                      lineWidth: 3.5,
+                      pointRadius: 8,
                       startColor: const Color.fromARGB(225, 239, 83, 80),
                       endColor: const Color.fromARGB(225, 102, 187, 106),
                       lineColor: const Color.fromARGB(175, 239, 83, 80),
@@ -134,14 +134,22 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () =>
-                            InheritedState.of(context).decrementFloor(),
-                        child: const Icon(
-                          Icons.arrow_downward,
-                          size: 25,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: Material(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0),
+                          ),
+                        ),
+                        color: Colors.grey[75],
+                        child: InkWell(
+                          onTap: () =>
+                              InheritedState.of(context).decrementFloor(),
+                          child: const Icon(
+                            Icons.arrow_downward,
+                            size: 25,
+                          ),
                         ),
                       ),
                     ),
@@ -149,26 +157,57 @@ class _HomeScreenState extends State<HomeScreen>
                   const SizedBox(
                     width: 15,
                   ),
-                  Text(
-                    'Floor  ${InheritedState.of(context).currentFloor}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                  // Text(
+                  //   'Floor  ${InheritedState.of(context).currentFloor}',
+                  //   textAlign: TextAlign.center,
+                  //   style: const TextStyle(
+                  //     fontWeight: FontWeight.w500,
+                  //     fontSize: 18,
+                  //   ),
+                  // ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Floor  ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                      ),
+                      /*defining default style is optional */
+                      children: [
+                        TextSpan(
+                          text: InheritedState.of(context)
+                              .currentFloor
+                              .toString(),
+                          style: const TextStyle(
+                            color: Colors.redAccent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
                     width: 15,
                   ),
                   Expanded(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () =>
-                            InheritedState.of(context).incrementFloor(),
-                        child: const Icon(
-                          Icons.arrow_upward,
-                          size: 25,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: Material(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0),
+                          ),
+                        ),
+                        color: Colors.grey[75],
+                        child: InkWell(
+                          onTap: () =>
+                              InheritedState.of(context).incrementFloor(),
+                          child: const Icon(
+                            Icons.arrow_upward,
+                            size: 25,
+                          ),
                         ),
                       ),
                     ),
@@ -302,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen>
                     SizedBox(
                       width: 30,
                       child: Transform.rotate(
-                        angle: -(_animation.value + constants.compassOffsset) *
+                        angle: (_animation.value + constants.compassOffsset) *
                             constants.deg2rad,
                         child: Image.asset(constants.compassArrow),
                       ),

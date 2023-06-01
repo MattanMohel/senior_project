@@ -78,16 +78,16 @@ class SearchButtonState extends State<SearchButton> {
                 ),
                 child: Row(
                   children: [
-                    if (searchRoom == null && widget.leadingIcon != null)
-                      Icon(widget.leadingIcon!),
-                    if (searchRoom == null && widget.leadingIcon == null)
-                      const Icon(Icons.search),
+                    if (widget.leadingIcon != null) Icon(widget.leadingIcon!),
+                    if (widget.leadingIcon == null) const Icon(Icons.search),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 12.0),
-                        child: Text(searchRoom != null
-                            ? searchRoom!.name
-                            : widget.hintText),
+                        child: Text(
+                          searchRoom != null
+                              ? "${searchRoom!.name} - Floor ${searchRoom!.floor}"
+                              : widget.hintText,
+                        ),
                       ),
                     ),
                     if (searchRoom != null)
@@ -184,8 +184,9 @@ class _SearchScreenState extends State<SearchScreen> {
             term.type != RoomType.none &&
             term.name
                 .toLowerCase()
-                .contains(widget.searchController.text.toLowerCase());
+                .contains(widget.searchController.text.trim().toLowerCase());
       }).toList();
+      _filteredRooms.sort((r1, r2) => r1.name.compareTo(r2.name));
     });
   }
 
@@ -252,7 +253,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if (_state.start != null &&
         _button.searchType == SearchType.end &&
-        widget.searchController.text.isEmpty) {
+        widget.searchController.text.isEmpty &&
+        !_floorFilter.any((floor) => !floor)) {
       Room? nearestBathroom = _state.getNearestOf(RoomType.bathroom);
       Room? nearestEntrance = _state.getNearestOf(RoomType.exit);
       Room? nearestWayUp = _state.getNearestOf(

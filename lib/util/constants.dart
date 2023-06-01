@@ -52,13 +52,13 @@ Future<void> openLinkInBrowser(String link) async {
 
 const String aboutPageMarkdown = '''## What is this App?
 
-This app was made by **Mattan Mohel** (me) for my (his) senior project in the year 2023. The app was made using the **Dart & Flutter** programming langauge / API
+This app was made by **Mattan Mohel** (me) for my (his) senior project in 2023 using the **Dart & Flutter** programming langauge / API
 
->> This is a tribute to all the lost souls traversing BHS, helping them find their way
+>> This app shall serve a tribute to all the lost souls traversing BHS, helping them find their way
 
 ## Special Thanks
 
-Now a bit more serious, I would like to thank **Mr. Jozokos** for giving me the opprotunity to work on this project and **Mr. Fritz** for heading the computer science department at BHS these past 4 years. These guys are pretty cool
+Now on a bit more of serious note, I would like to thank **Mr. Jozokos** for giving me the opprotunity to work on this project and **Mr. Fritz** for heading the computer science department at BHS these past 4 years. These guys are pretty cool
 
 ## Any Questions (Or Bugs)
 
@@ -74,12 +74,12 @@ If you have any questions or encounter any bugs please feel free to report them 
     /_____/   U
 ```
 
-## I hope you enjoyed! 
+## I hope you like it! 
 
 ''';
 
 const String manualMarkdown =
-    '''### If you're here then you must have already found the control panel. If you haven't then I'm genuinely impressed at your abilities to somehow open this page
+    '''### If you're here then you must have already found the control panel. If you haven't I'm genuinely impressed at your abilities to somehow open this page
 
 ## Let's begin then 
   
@@ -94,31 +94,28 @@ const String manualMarkdown =
 - if enabled, you will be directed through the elevator rather than the stairs
 
 > **Popup Menu** 
-- That's how you got _here_! But it can also take you to the **About Page** or the **School Website**. It's quite the versatile tool
+- that's how you got _here_! But it can also take you to the **About Page** or the **School Website**. It's quite the versatile tool
 
 > **Where from?** 
-- This controls your **starting** position, designated by a **red point** on the map. Tell it some about yourself - it's a good listener
+- This controls your **starting** location, designated by a **red point** on the map. This button wants to know all about where you are... and how you're doing
 
 > **Where to?** 
-- This controls your **ending** positions, designated by a **green point** on the map. It's a straightforward question, but also very much a philosophical one
+- This controls your **ending** destination, designated by a **green point** on the map. _Where to..._ It's a straightforward question, but also very much a philosophical one
 
-Now to the **Main Screen...**
-
-> **Compass** 
-- this shows your direction of travel **relative to the school**, meaning that if the arrow points **up**, you're going **upwards** on the map, sort of like a real compass
+Now to the **Main Screen**
 
 > **Map** 
-- this is the map - follow the **red line** like a moth to a light and you'll get to where you need to be in no time. Zoom in, zoom out, take a screenshot, share it, appreciate just how nice it is that you're taken care of by this nice little app of mine
+- this is the map - follow the **red line** like a trail of crumbs and you'll get to where you need to be in no time. Relax, now that you're here you can rest assured you're taken care of
 
 > But if you're interested in the **Search Screen...**
 
-1. Type in the name of your destination into the text field and watch as it comes up on the list. Click it to select it, and... done
+1. Type in the name of your destination into the text field and watch as it comes up on the list. Click the room you want to select it, and... done
 
-2. But what if I want to gander at all the different rooms on the list? I hear you asking. Feel free to scroll
+2. But what if I want to gander at all the different rooms on the list? I hear you asking - Feel free to scroll
 
-At the top, you'll find that this applications comes armed with the option to filter rooms by floor. Try any combination you like - or just deselect them all because the background also looks quite nice
+Also, at the top, you'll find that this applications comes armed with the option to filter rooms by floor. You can also deselct all floors because looking at the background is also fun
 
-Additionally, after selecting a starting position, you'll find that your **Where To** page shows you the **Nearest Bathroom and Exit** - just because I care for you so much
+Additionally, after selecting a starting position, you'll find that your **Where To** page shows you the **Nearest Bathroom, Exit, and Stairs/Elevator** - just because I care for you so much
 
 > I think that sums it up pretty well, so here's an ASCII kitten & cheese that **ChatGPT** drew:
 
@@ -131,6 +128,6 @@ Additionally, after selecting a starting position, you'll find that your **Where
        ||
 ```
 
-## Thank you for your time
+## ChatGPT took the prompt pretty literally, but I still think it looks nice
 
 ''';
