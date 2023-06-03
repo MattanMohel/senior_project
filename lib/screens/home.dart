@@ -8,6 +8,7 @@ import 'package:senior_project/util/constants.dart' as constants;
 import 'package:senior_project/util/toggle.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../util/room.dart';
 import 'search.dart';
 import '../util/background.dart';
 import 'about_page.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen>
   double step = 15;
 
   final PanelController _panelController = PanelController();
+  final GlobalKey _key = GlobalKey();
 
   late Animation<double> _animation;
   late Tween<double> _tween;
@@ -96,8 +98,28 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Image.asset(constants.backgrounds[
-                        InheritedState.of(context).currentFloor - 1]),
+                    child: GestureDetector(
+                      key: _key,
+                      onTapUp: (details) {
+                        Rect size = (_key.currentContext?.findRenderObject()
+                                as RenderBox)
+                            .paintBounds;
+
+                        double x = details.localPosition.dx / size.width;
+                        double y = details.localPosition.dy / size.height;
+
+                        Room? closestQuery =
+                            InheritedState.of(context).closestRoomTo(x, y);
+
+                        if (closestQuery != null) {
+                          _showSelectionPopupMenu(context, closestQuery);
+                        }
+                      },
+                      child: Image.asset(
+                        constants.backgrounds[
+                            InheritedState.of(context).currentFloor - 1],
+                      ),
+                    ),
                   ),
                   CustomPaint(
                     painter: MapPainter(
@@ -159,14 +181,6 @@ class _HomeScreenState extends State<HomeScreen>
                   const SizedBox(
                     width: 15,
                   ),
-                  // Text(
-                  //   'Floor  ${InheritedState.of(context).currentFloor}',
-                  //   textAlign: TextAlign.center,
-                  //   style: const TextStyle(
-                  //     fontWeight: FontWeight.w500,
-                  //     fontSize: 18,
-                  //   ),
-                  // ),
                   RichText(
                     text: TextSpan(
                       text: 'Floor  ',
@@ -175,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen>
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
                       ),
-                      /*defining default style is optional */
                       children: [
                         TextSpan(
                           text: InheritedState.of(context)
@@ -231,7 +244,6 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Icon(Icons.accessible),
                     ),
                   ),
-
                   SizedBox(
                     height: 35,
                     width: _panelController.isAttached
@@ -294,10 +306,6 @@ class _HomeScreenState extends State<HomeScreen>
                           child: const Icon(Icons.more_vert)),
                     ),
                   )
-                  // const Padding(
-                  //   padding: EdgeInsets.only(right: 12.0, left: 4.0),
-                  //   child: Icon(Icons.more_vert),
-                  // ),
                 ],
               ),
               const Padding(
@@ -356,6 +364,30 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
       ],
+    );
+  }
+
+  void _showSelectionPopupMenu(BuildContext context, Room closest) async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fill,
+      items: [
+        PopupMenuItem(
+          child: const Row(
+            children: [Icon(Icons.accessibility_new), Text('   As Location')],
+          ),
+          onTap: () => InheritedState.of(context).setStartPoint(closest),
+        ),
+        PopupMenuItem(
+            child: const Row(
+              children: [
+                Icon(Icons.location_on),
+                Text('   As Destination'),
+              ],
+            ),
+            onTap: () => InheritedState.of(context).setEndPoint(closest)),
+      ],
+      elevation: 8.0,
     );
   }
 }

@@ -350,7 +350,7 @@
         "id": "C130 Gym",
         "number": null,
         "floor": 1,
-        "x": 610,
+        "x": 400,
         "y": 766,
         "room_type": "Misc",
         "description": "",
@@ -581,7 +581,7 @@
         "description": "",
         "nodes": [
             "666904",
-            "C127 School Store",
+            "C127 Dog Pound",
             "667765"
         ]
     },
@@ -830,13 +830,13 @@
         ]
     },
     {
-        "id": "C127 School Store",
+        "id": "C127 Dog Pound",
         "number": null,
         "floor": 1,
         "x": 701,
         "y": 785,
         "room_type": "Misc",
-        "description": "",
+        "description": "School Store",
         "nodes": [
             "666784"
         ]

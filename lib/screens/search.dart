@@ -42,8 +42,30 @@ class SearchButton extends StatefulWidget {
 class SearchButtonState extends State<SearchButton> {
   SearchButtonState();
 
-  Room? searchRoom;
   List<Room> recents = [];
+
+  Room? _searchRoom(BuildContext context) {
+    switch (widget.searchType) {
+      case SearchType.start:
+        return InheritedState.of(context).start;
+      case SearchType.end:
+        return InheritedState.of(context).end;
+    }
+  }
+
+  String? _searchRoomName(BuildContext context) {
+    Room? room = _searchRoom(context);
+
+    if (room == null) {
+      return null;
+    }
+
+    if (room.type == RoomType.none) {
+      return "Hallway";
+    }
+
+    return room.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +106,13 @@ class SearchButtonState extends State<SearchButton> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 12.0),
                         child: Text(
-                          searchRoom != null
-                              ? "${searchRoom!.name} - Floor ${searchRoom!.floor}"
+                          _searchRoom(context) != null
+                              ? "${_searchRoomName(context)!} - Floor ${_searchRoom(context)!.floor}"
                               : widget.hintText,
                         ),
                       ),
                     ),
-                    if (searchRoom != null)
+                    if (_searchRoom(context) != null)
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: InkWell(
@@ -121,7 +143,6 @@ class SearchButtonState extends State<SearchButton> {
     }
 
     if (room == null) {
-      setState(() => searchRoom = null);
       return;
     }
 
@@ -133,7 +154,6 @@ class SearchButtonState extends State<SearchButton> {
       recents.removeAt(0);
     }
 
-    searchRoom = room;
     setState(() => recents.add(room));
   }
 }
@@ -171,6 +191,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   SearchButton get _button => widget.searchState.widget;
   InheritedState get _state => widget.searchState.state;
+
+  Room? _searchRoom() {
+    switch (_button.searchType) {
+      case SearchType.start:
+        return _state.start;
+      case SearchType.end:
+        return _state.end;
+    }
+  }
 
   void _exitSearch(BuildContext context, Room? result) {
     widget.searchState.setText(result);
@@ -274,7 +303,7 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     }
 
-    if (widget.searchState.searchRoom != null &&
+    if (_searchRoom() != null &&
         widget.searchState.recents.isNotEmpty &&
         widget.searchController.text.isEmpty) {
       _buildTab(
@@ -383,8 +412,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             prefixIconColor: Colors.black26,
                             prefixIcon: InkWell(
                               child: const Icon(Icons.arrow_back),
-                              onTap: () => _exitSearch(
-                                  context, widget.searchState.searchRoom),
+                              onTap: () => _exitSearch(context, _searchRoom()),
                             ),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,

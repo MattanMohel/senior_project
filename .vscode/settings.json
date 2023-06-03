@@ -11,4 +11,5 @@
 	},
 	"java.configuration.updateBuildConfiguration": "interactive",
 	"cmake.configureOnOpen": false,
+	"cmake.sourceDirectory": "C:/repo/flutter/senior_project/linux",
 }

@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,28 @@ class InheritedState extends InheritedWidget {
   void toggleAccessibility() => appState._toggleAccessibility();
   void incrementFloor() => appState._incrementFloor();
   void decrementFloor() => appState._decrementFloor();
+
+  Room? closestRoomTo(double x, double y) {
+    double xPx = constants.dimensions[currentFloor - 1].width * x;
+    double yPx = constants.dimensions[currentFloor - 1].height * y;
+
+    Room closest = rooms.reduce((r1, r2) {
+      double d1 = sqrt(pow(r1.x - xPx, 2) + pow(r1.y - yPx, 2));
+      double d2 = sqrt(pow(r2.x - xPx, 2) + pow(r2.y - yPx, 2));
+
+      if (r1.floor != currentFloor) {
+        return r2;
+      }
+      if (r2.floor != currentFloor) {
+        return r1;
+      }
+
+      return d1 < d2 ? r1 : r2;
+    });
+
+    double distance = sqrt(pow(closest.x - xPx, 2) + pow(closest.y - yPx, 2));
+    return distance < 150 ? closest : null;
+  }
 
   // path computation
 
