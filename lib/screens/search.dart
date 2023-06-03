@@ -60,11 +60,7 @@ class SearchButtonState extends State<SearchButton> {
       return null;
     }
 
-    if (room.type == RoomType.none) {
-      return "Hallway";
-    }
-
-    return room.name;
+    return InheritedState.of(context).roomIdentifier(room);
   }
 
   @override

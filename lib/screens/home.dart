@@ -368,24 +368,59 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _showSelectionPopupMenu(BuildContext context, Room closest) async {
+    InheritedState state = InheritedState.of(context);
+    String roomName = state.roomIdentifier(closest);
+
+    bool isEnd = state.end != null && state.end!.name == closest.name;
+    bool isStart = state.start != null && state.start!.name == closest.name;
+
     await showMenu(
       context: context,
       position: RelativeRect.fill,
       items: [
         PopupMenuItem(
-          child: const Row(
-            children: [Icon(Icons.accessibility_new), Text('   As Location')],
+          child: Text(
+            roomName,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.redAccent,
+            ),
           ),
-          onTap: () => InheritedState.of(context).setStartPoint(closest),
         ),
-        PopupMenuItem(
+        if (!isStart && !isEnd)
+          PopupMenuItem(
+            child: const Row(
+              children: [Icon(Icons.accessibility_new), Text('   As Location')],
+            ),
+            onTap: () => InheritedState.of(context).setStartPoint(closest),
+          ),
+        if (isStart)
+          PopupMenuItem(
+            child: const Row(
+              children: [Icon(Icons.clear), Text('   Clear Location')],
+            ),
+            onTap: () => InheritedState.of(context).setStartPoint(null),
+          ),
+        if (!isEnd && !isStart)
+          PopupMenuItem(
             child: const Row(
               children: [
                 Icon(Icons.location_on),
                 Text('   As Destination'),
               ],
             ),
-            onTap: () => InheritedState.of(context).setEndPoint(closest)),
+            onTap: () => InheritedState.of(context).setEndPoint(closest),
+          ),
+        if (isEnd)
+          PopupMenuItem(
+            child: const Row(
+              children: [
+                Icon(Icons.clear),
+                Text('   Clear Destination'),
+              ],
+            ),
+            onTap: () => InheritedState.of(context).setEndPoint(null),
+          ),
       ],
       elevation: 8.0,
     );

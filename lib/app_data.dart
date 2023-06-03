@@ -47,6 +47,14 @@ class InheritedState extends InheritedWidget {
   void incrementFloor() => appState._incrementFloor();
   void decrementFloor() => appState._decrementFloor();
 
+  String roomIdentifier(Room room) {
+    if (room.type == RoomType.none) {
+      return "Passage Point";
+    }
+
+    return room.name;
+  }
+
   Room? closestRoomTo(double x, double y) {
     double xPx = constants.dimensions[currentFloor - 1].width * x;
     double yPx = constants.dimensions[currentFloor - 1].height * y;
@@ -176,12 +184,19 @@ class AppBaseState extends State<AppBase> {
 
   void _setStartPoint(Room? start) {
     if (start != null) {
+      if (_end != null && start.name == _end!.name) {
+        return;
+      }
+
       _floor = start.floor;
     }
     setState(() => _start = start);
   }
 
   void _setEndPoint(Room? end) {
+    if (_start != null && end != null && _start!.name == end.name) {
+      return;
+    }
     setState(() => _end = end);
   }
 }
