@@ -185,7 +185,7 @@ class AppBaseState extends State<AppBase> {
   void _setStartPoint(Room? start) {
     if (start != null) {
       if (_end != null && start.name == _end!.name) {
-        return;
+        _end = null;
       }
 
       _floor = start.floor;
@@ -195,7 +195,7 @@ class AppBaseState extends State<AppBase> {
 
   void _setEndPoint(Room? end) {
     if (_start != null && end != null && _start!.name == end.name) {
-      return;
+      _start = null;
     }
     setState(() => _end = end);
   }

@@ -1453,7 +1453,7 @@
         "floor": 1,
         "x": 1170,
         "y": 1846,
-        "room_type": "Nurse",
+        "room_type": "Office",
         "description": "",
         "nodes": [
             "11921866"

@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:senior_project/app_data.dart';
@@ -13,6 +13,7 @@ class MapPainter extends CustomPainter {
     required this.state,
     this.lineColor = Colors.blue,
     required this.startColor,
+    required this.middleColor,
     required this.endColor,
   });
 
@@ -21,6 +22,7 @@ class MapPainter extends CustomPainter {
   final double pointRadius;
   final Color lineColor;
   final Color startColor;
+  final Color middleColor;
   final Color endColor;
 
   @override
@@ -35,6 +37,8 @@ class MapPainter extends CustomPainter {
     Size imageSize = constants.dimensions[state.currentFloor - 1];
     Offset? pI;
     Offset? pF;
+    bool absoluteStart = true;
+    bool absoluteEnd = true;
 
     if (state.start != null && state.start!.floor == state.currentFloor) {
       pI = state.pixelToScreenSpace(imageSize, state.start!.offset);
@@ -60,6 +64,14 @@ class MapPainter extends CustomPainter {
 
       pI = state.pixelToScreenSpace(imageSize, roomPath[startIndex].offset);
       pF = state.pixelToScreenSpace(imageSize, roomPath[endIndex].offset);
+
+      if (startIndex != 0) {
+        absoluteStart = false;
+      }
+      if (endIndex != roomPath.length - 1) {
+        absoluteEnd = false;
+      }
+
       path.moveTo(pI.dx, pI.dy);
 
       for (int i = startIndex + 1; i <= endIndex; i++) {
@@ -73,17 +85,17 @@ class MapPainter extends CustomPainter {
     paint.strokeWidth = pointRadius;
 
     if (pI != null) {
-      paint.color = startColor;
-      canvas.drawPoints(PointMode.points, [pI], paint);
+      paint.color = absoluteStart ? startColor : middleColor;
+      canvas.drawPoints(ui.PointMode.points, [pI], paint);
     }
     if (pF != null) {
-      paint.color = endColor;
-      canvas.drawPoints(PointMode.points, [pF], paint);
+      paint.color = absoluteEnd ? endColor : middleColor;
+      canvas.drawPoints(ui.PointMode.points, [pF], paint);
     }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return false;
   }
 }

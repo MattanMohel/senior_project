@@ -101,9 +101,10 @@ class _HomeScreenState extends State<HomeScreen>
                     child: GestureDetector(
                       key: _key,
                       onTapUp: (details) {
-                        Rect size = (_key.currentContext?.findRenderObject()
-                                as RenderBox)
-                            .paintBounds;
+                        RenderBox rb = _key.currentContext?.findRenderObject()
+                            as RenderBox;
+
+                        Rect size = rb.paintBounds;
 
                         double x = details.localPosition.dx / size.width;
                         double y = details.localPosition.dy / size.height;
@@ -127,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen>
                       lineWidth: 3.5,
                       pointRadius: 8,
                       startColor: const Color.fromARGB(225, 239, 83, 80),
+                      middleColor: const Color.fromARGB(223, 255, 133, 77),
                       endColor: const Color.fromARGB(225, 102, 187, 106),
                       lineColor: const Color.fromARGB(175, 239, 83, 80),
                     ),
@@ -387,21 +389,33 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
         ),
-        if (!isStart && !isEnd)
+        if (!isStart)
           PopupMenuItem(
             child: const Row(
-              children: [Icon(Icons.accessibility_new), Text('   As Location')],
+              children: [
+                Icon(Icons.accessibility_new),
+                Text('   As Location'),
+              ],
             ),
-            onTap: () => InheritedState.of(context).setStartPoint(closest),
+            onTap: () {
+              if (isEnd) {
+                state.setEndPoint(null);
+              }
+
+              state.setStartPoint(closest);
+            },
           ),
         if (isStart)
           PopupMenuItem(
             child: const Row(
-              children: [Icon(Icons.clear), Text('   Clear Location')],
+              children: [
+                Icon(Icons.clear),
+                Text('   Clear Location'),
+              ],
             ),
             onTap: () => InheritedState.of(context).setStartPoint(null),
           ),
-        if (!isEnd && !isStart)
+        if (!isEnd)
           PopupMenuItem(
             child: const Row(
               children: [
@@ -409,7 +423,13 @@ class _HomeScreenState extends State<HomeScreen>
                 Text('   As Destination'),
               ],
             ),
-            onTap: () => InheritedState.of(context).setEndPoint(closest),
+            onTap: () {
+              if (isStart) {
+                state.setStartPoint(null);
+              }
+
+              state.setEndPoint(closest);
+            },
           ),
         if (isEnd)
           PopupMenuItem(

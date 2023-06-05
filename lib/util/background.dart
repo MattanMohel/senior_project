@@ -20,18 +20,23 @@ class BackgroundPainter extends CustomPainter {
       ..strokeWidth = width;
 
     Size screen = window.physicalSize;
-    for (double i = -screen.height; i < screen.height; i += lineDensity) {
+
+    for (double i = -0.5 * screen.height;
+        i < 0.5 * screen.height;
+        i += lineDensity) {
       canvas.drawLine(
-        Offset(-2 * screen.width, i),
-        Offset(2 * screen.width, i),
+        Offset(-0.5 * screen.width, i),
+        Offset(0.5 * screen.width, i),
         paint,
       );
     }
 
-    for (double i = -2 * screen.width; i < 2 * screen.width; i += lineDensity) {
+    for (double i = -0.5 * screen.width;
+        i < 0.5 * screen.width;
+        i += lineDensity) {
       canvas.drawLine(
-        Offset(i, -screen.height),
-        Offset(i, screen.height),
+        Offset(i, -0.5 * screen.height),
+        Offset(i, 0.5 * screen.height),
         paint,
       );
     }
